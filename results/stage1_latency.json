@@ -1,0 +1,29 @@
+{
+  "n_samples": 1000,
+  "confidence_threshold": 0.95,
+  "stage1_only": {
+    "p50_ms": 0.3491065000034155,
+    "p90_ms": 0.4989827000130731,
+    "p99_ms": 5.162365669992885,
+    "mean_ms": 0.997419495000031,
+    "std_ms": 6.199152274536004
+  },
+  "stage1_exit_rate": 1.0,
+  "stage1_accuracy": 1.0,
+  "projected_cascade_with_s2_ref_latency_100ms": {
+    "stage2_reference_latency_ms": 100.0,
+    "p50_ms": 0.3491065000034155,
+    "p90_ms": 0.4989827000130731,
+    "p99_ms": 5.162365669992885,
+    "mean_ms": 0.997419495000031
+  },
+  "projected_monolithic_with_s2_ref_latency_100ms": {
+    "p50_ms": 100.34910650000342,
+    "mean_ms": 100.99741949500002
+  },
+  "projected_speedup_vs_monolithic": {
+    "p50": 287.4455402549699,
+    "mean": 101.25871812340792
+  },
+  "notes": "Stage 1 latencies are REAL MEASUREMENTS on this machine's CPU. Stage 2 latency is a REFERENCE VALUE (100 ms) representative of small multimodal transformers on CPU; real Stage 2 latency should be measured on the target deployment hardware. Synthetic data produces an easier triage task than real DroneRF, so the reported exit rate is an UPPER BOUND on what to expect. Real-world exit rate is typically 70-90% on DroneRF."
+}

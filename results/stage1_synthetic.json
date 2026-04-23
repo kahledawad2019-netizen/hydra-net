@@ -1,0 +1,21 @@
+{
+  "overall_accuracy": 1.0,
+  "overall_f1": 1.0,
+  "overall_roc_auc": 1.0,
+  "confusion_matrix": [
+    [
+      99,
+      0
+    ],
+    [
+      0,
+      101
+    ]
+  ],
+  "stage1_exit_rate": 1.0,
+  "stage1_exit_accuracy": 1.0,
+  "confidence_threshold": 0.95,
+  "n_train": 800,
+  "n_test": 200,
+  "n_features": 30
+}

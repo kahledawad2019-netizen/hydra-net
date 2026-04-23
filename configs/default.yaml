@@ -1,0 +1,69 @@
+# HYDRA-Net default configuration
+# Override any field via CLI --config or environment variable HYDRA_NET_<FIELD>
+
+stage1:
+  confidence_threshold: 0.95
+  xgboost:
+    n_estimators: 200
+    max_depth: 6
+    learning_rate: 0.1
+    objective: binary:logistic
+    eval_metric: logloss
+    tree_method: hist
+
+stage2:
+  confidence_threshold: 0.85
+  embed_dim: 192
+  n_heads: 6
+  n_layers: 6
+  n_classes: 2
+  dropout: 0.1
+  image_size: 224
+  modality_dropout_prob: 0.2
+
+stage3:
+  hidden_dim: 128
+  n_layers: 3
+  spatial_threshold_m: 50.0
+  velocity_coherence_weight: 0.5
+  multi_target_threshold: 2
+
+features:
+  rf_sample_rate_hz: 20000000   # 20 MHz default; DroneRF uses 40 MHz
+  audio_sample_rate_hz: 16000
+  n_mfcc: 13
+
+fusion:
+  buffer_seconds: 2.0
+  expected_rates_hz:
+    rgb: 30
+    ir: 30
+    audio: 30        # feature-frame rate, not raw 16 kHz
+    rf: 100
+    radar: 10
+
+modality_gate:
+  context_dim: 14
+  hidden_dim: 32
+  modality_order: [rgb, ir, audio, rf]
+
+training:
+  stage1:
+    test_size: 0.2
+    random_seed: 42
+  stage2:
+    batch_size: 32
+    learning_rate: 3.0e-4
+    weight_decay: 1.0e-4
+    epochs: 10
+    optimizer: adamw
+    scheduler: cosine
+  stage3:
+    batch_size: 64     # scenes per batch
+    learning_rate: 3.0e-4
+    epochs: 20
+
+paths:
+  models_dir: models
+  results_dir: results
+  data_dir: data
