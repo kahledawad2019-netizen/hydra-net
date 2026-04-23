@@ -1,0 +1,121 @@
+{
+  "experiment": "HYDRA-Net Stage 1 on RF-Signals-of-UAVs",
+  "date": "2026-04-23",
+  "dataset": {
+    "name": "RF-Signals-of-UAVs",
+    "source": "Kaggle: xcz74741/rf-signals-of-uavs",
+    "total_size_gb": 52.26,
+    "subset_used": "400 files per folder × 18 folders = 7200 files",
+    "subset_size_gb": 3.1,
+    "classes": {
+      "0": "1m (near, indoor)",
+      "1": "50m (medium, outdoor)",
+      "2": "100m (far, outdoor)"
+    },
+    "class_balance_samples": 2400
+  },
+  "preprocessing": {
+    "feature_extractor": "hydra_net.stage1.features.extract_rf_features",
+    "feature_dim": 30,
+    "rf_feature_dim": 10,
+    "audio_feature_dim_zero_padded": 20,
+    "assumed_sample_rate_hz": 20000000,
+    "signal_variable_names_detected": ["sig1", "sig"],
+    "universal_loader_used": true
+  },
+  "split": {
+    "method": "stratified 80/20",
+    "random_state": 42,
+    "n_train": 5760,
+    "n_test": 1440
+  },
+  "model": {
+    "type": "XGBoost Classifier",
+    "objective": "multi:softprob",
+    "num_class": 3,
+    "n_estimators": 300,
+    "max_depth": 6,
+    "learning_rate": 0.1,
+    "tree_method": "hist"
+  },
+  "training_time_s": 1.33,
+  "classification_metrics": {
+    "accuracy": 0.9007,
+    "f1_macro": 0.9003,
+    "f1_weighted": 0.9003,
+    "roc_auc_ovr": 0.9812
+  },
+  "per_class_report": {
+    "1m_near": {
+      "precision": 0.96,
+      "recall": 0.97,
+      "f1_score": 0.97,
+      "support": 480
+    },
+    "50m_medium": {
+      "precision": 0.88,
+      "recall": 0.83,
+      "f1_score": 0.85,
+      "support": 480
+    },
+    "100m_far": {
+      "precision": 0.87,
+      "recall": 0.90,
+      "f1_score": 0.88,
+      "support": 480
+    }
+  },
+  "confusion_matrix": {
+    "rows": "true labels (1m / 50m / 100m)",
+    "cols": "predicted labels (1m / 50m / 100m)",
+    "matrix": [
+      [467, 12, 1],
+      [15, 399, 66],
+      [4, 45, 431]
+    ]
+  },
+  "cascade_exit_analysis": {
+    "thresholds": [0.70, 0.80, 0.90, 0.95, 0.99],
+    "exit_rates": [0.9104, 0.8569, 0.7840, 0.7090, 0.5174],
+    "exit_accuracies": [0.9375, 0.9546, 0.9699, 0.9794, 0.9946],
+    "n_exited_samples": [1311, 1234, 1129, 1021, 745],
+    "operating_point": {
+      "threshold": 0.95,
+      "exit_rate": 0.7090,
+      "exit_accuracy": 0.9794,
+      "rationale": "Pareto-optimal: 71% of traffic exits with 97.9% accuracy"
+    }
+  },
+  "latency_measurements_ms": {
+    "device": "Colab CPU (x86, no GPU)",
+    "n_samples": 1440,
+    "stage1_only": {
+      "p50": 1.030,
+      "p90": 1.358,
+      "p99": 3.200,
+      "mean": 1.142
+    },
+    "stage1_exit_rate_at_tau_0.95": 0.7118,
+    "projected_cascade_with_stage2_ref_100ms": {
+      "p50_ms": 1.10,
+      "mean_ms": 29.96,
+      "note": "Stage 2 reference latency (100 ms) is a placeholder until actual Stage 2 is trained/integrated."
+    },
+    "projected_monolithic_baseline": {
+      "p50_ms": 101.03,
+      "mean_ms": 101.14
+    },
+    "speedup": {
+      "p50": 91.9,
+      "mean": 3.4
+    }
+  },
+  "honest_disclosures": [
+    "Dataset has no background/no-drone class; reframed as 3-class distance estimation.",
+    "Class 0 (1m) is the only indoor class, introducing a small indoor/outdoor confound (1.3% of outdoor samples misclassified as 1m).",
+    "Sampling rate of 20 MHz is an assumption (dataset does not specify).",
+    "Audio features are zero-vectors (dataset has no audio modality) — this is a valid RF-only-edge deployment scenario.",
+    "Stage 2 latency of 100 ms is a reference value, not a measurement.",
+    "Dataset uses inconsistent variable naming (sig1 indoor, sig outdoor) — universal loader implemented to handle both."
+  ]
+}
