@@ -153,7 +153,7 @@ Details: `docs/DATASETS.md`.
 
 ## 👤 Author
 
-**Khaled Metwalie** — Data Scientist, DEPI graduate
+**Khaled Metwalie**&**rahma ahmed** — Data Scientist, DEPI graduate
 Portfolio: [khaledmetwalie.lovable.app](https://khaledmetwalie.lovable.app)
 
 ## 📄 License
